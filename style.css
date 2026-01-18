@@ -268,64 +268,86 @@ td {
     cursor: pointer;
 }
 
-/* 6. 모바일 대응 (아이폰 최적화) */
+/* --- 모바일 지능형 레이아웃 (768px 이하) --- */
 @media (max-width: 768px) {
     .control-panel {
-        top: auto;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: auto;
-        max-height: 38vh;
-        border-radius: 20px 20px 0 0;
-        padding: 12px 15px calc(15px + env(safe-area-inset-bottom));
-        /* 하단 여백 자동 계산 */
-    }
+        /* 상단 고정 해제 및 하단 밀착 */
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
 
-    header {
+        /* 가로 너비 보정 */
+        width: 100% !important;
+        max-width: 100vw !important;
+        /* 화면 너비를 절대 넘지 않게 */
+        height: auto;
+        max-height: 40vh;
+        /* 지도 확보를 위해 높이 제한 */
+
+        /* 여백 및 테두리 보정 */
+        margin: 0 !important;
+        padding: 15px 15px calc(15px + env(safe-area-inset-bottom)) !important;
+        border-radius: 20px 20px 0 0;
+        box-sizing: border-box;
+        /* 패딩이 너비에 포함되도록 설정 (매우 중요) */
+
         display: flex;
         flex-direction: column;
-        gap: 5px;
-        margin-bottom: 8px;
+        z-index: 1000;
+    }
+
+    /* 헤더 구성 요소가 밖으로 나가지 않게 flex 조정 */
+    header {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .meta-row {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     h1 {
-        font-size: 1.4rem;
-        margin: 5px 0;
+        font-size: 1.3rem;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* 제목이 길면 생략 */
     }
 
+    /* 버튼들이 화면 밖으로 밀려나지 않게 한 줄 배치 */
     .btn-group {
         display: flex;
-        gap: 5px;
         width: 100%;
+        gap: 6px;
     }
 
     .btn-group button {
         flex: 1;
-        padding: 10px 5px;
+        /* 가로 공간을 균등하게 나눠 가짐 */
+        padding: 10px 2px;
         font-size: 0.75rem;
-        white-space: nowrap;
+        min-width: 0;
+        /* flex 안에서 줄어들 수 있게 설정 */
     }
 
+    /* 정보 띠지 */
     .current-info {
-        padding: 8px 12px;
+        padding: 10px;
         border-radius: 10px;
-    }
-
-    #day-text {
-        font-size: 0.75rem;
-    }
-
-    #act-text {
         font-size: 0.85rem;
     }
 
-    /* 모바일에서 팝업창 크기 최적화 */
-    .modal-body {
-        width: 95%;
-        max-height: 85vh;
-        border-radius: 20px;
+    /* 리스트가 넘치지 않게 조절 */
+    #log-list {
+        max-height: 120px;
+        overflow-y: auto;
     }
 }
 
