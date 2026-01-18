@@ -75,13 +75,14 @@ async function runSimulation()
     btn.disabled = true;
     list.innerHTML = "";
     travelPath.setLatLngs([]);
-    lastDisplayedDay = "";
+    let lastDisplayedDay = "";
+
+    const isMobile = window.innerWidth <= 768;
 
     for (let i = 0; i < travelData.length; i++)
     {
         const p = travelData[i];
 
-        // 1. 날짜 구분선 추가
         if (lastDisplayedDay !== p.d)
         {
             const dateHeader = document.createElement('div');
@@ -91,29 +92,29 @@ async function runSimulation()
             lastDisplayedDay = p.d;
         }
 
-        // 2. 리스트 아이템 생성 및 클릭 이벤트 추가
         const li = document.createElement('li');
         li.className = "clickable-item";
         li.innerHTML = `<span class="t-tag">${p.t}</span><span>${p.act}</span>`;
 
-        // 클릭 시 해당 위치로 지도 이동 (이동 중이 아닐 때 자유롭게 클릭 가능)
         li.onclick = () =>
         {
-            map.flyTo(p.loc, 15, { duration: 1.5 });
+            let clickLoc = L.latLng(p.loc);
+            // 클릭 시에도 더 높은 오프셋 적용 (0.015)
+            let offsetLoc = isMobile ? [clickLoc.lat - 0.015, clickLoc.lng] : clickLoc;
+
+            map.flyTo(offsetLoc, 15, { duration: 1.5 });
             marker.setLatLng(p.loc);
             marker.setIcon(L.divIcon({
                 html: `<i class="fa-solid ${p.icon}" style="font-size:35px; color:#e74c3c; text-shadow:0 0 15px white;"></i>`,
                 className: 'c-icon', iconSize: [40, 40]
             }));
 
-            // 클릭한 항목 강조 스타일
             document.querySelectorAll('.clickable-item').forEach(item => item.classList.remove('active-item'));
             li.classList.add('active-item');
         };
 
         list.prepend(li);
 
-        // 3. 자동 시뮬레이션 이동 로직 (기존과 동일)
         const startLoc = marker.getLatLng();
         const endLoc = L.latLng(p.loc);
         const moveObj = { t: 0 };
@@ -121,10 +122,13 @@ async function runSimulation()
         document.getElementById('day-text').innerText = `${p.d} 일정`;
         document.getElementById('act-text').innerText = `${p.t} - ${p.act}`;
 
-        // 시뮬레이션 내부의 targetZoom 결정 로직 수정
-        let isMobile = window.innerWidth <= 768;
+        // 지능형 줌 및 강화된 오프셋 설정
         let targetZoom = (p.d === "02.10" && i < 2) || p.d === "02.21" ? (isMobile ? 4 : 5) : (isMobile ? 12 : 13);
-        map.flyTo(p.loc, targetZoom, { duration: 1.5, ease: "power2.inOut" });
+
+        // 오프셋 값을 0.015로 높여 마커를 더 위로 배치
+        let centerLoc = isMobile ? [endLoc.lat - 0.015, endLoc.lng] : endLoc;
+
+        map.flyTo(centerLoc, targetZoom, { duration: 1.5, ease: "power2.inOut" });
 
         await new Promise(res =>
         {
@@ -156,7 +160,6 @@ async function runSimulation()
     }
     btn.disabled = false;
 }
-
 // 모달 및 기타 기능
 const openItinerary = () =>
 {
@@ -203,5 +206,10 @@ document.getElementById('pdf-btn').onclick = () =>
 document.getElementById('theme-btn').onclick = () =>
 {
     document.body.classList.toggle('dark-theme');
-    document.querySelector('#theme-btn i').className = document.body.classList.contains('dark-theme') ? 'fas fa-sun' : 'fas fa-moon';
+    const isDark = document.body.classList.contains('dark-theme');
+
+    // 상단바(노치) 색상 변경
+    document.getElementById('theme-meta').setAttribute('content', isDark ? '#1a1a1a' : '#ffffff');
+
+    document.querySelector('#theme-btn i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
 };

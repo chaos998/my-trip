@@ -333,76 +333,104 @@ td {
     }
 }
 
+/* --- 모바일 지능형 레이아웃 (768px 이하) --- */
+/* --- 모바일 대응 (768px 이하) --- */
 @media (max-width: 768px) {
     .control-panel {
         top: auto;
-        /* 상단 고정 해제 */
+        bottom: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        /* 하단에 밀착 */
         width: 100%;
-        /* 가로 꽉 차게 */
-        height: 40vh;
-        /* 화면 높이의 40%만 차지 */
-        border-radius: 25px 25px 0 0;
-        /* 위쪽만 둥글게 */
-        padding: 15px 20px;
+        height: auto;
+        max-height: 38vh;
+        /* 리스트 가독성을 위해 살짝 조절 */
+        border-radius: 20px 20px 0 0;
+        padding: 12px 15px calc(10px + env(safe-area-inset-bottom));
         box-sizing: border-box;
-        transition: height 0.3s ease;
+    }
+
+    /* 1. 헤더 영역 최적화 (넘침 방지) */
+    header {
+        display: flex;
+        flex-direction: column;
+        /* 세로로 쌓되 간격 최소화 */
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 0;
     }
 
     h1 {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
+        font-size: 1.4rem;
+        /* 모바일에서 시원하면서도 안 넘치게 */
+        margin: 5px 0;
+        font-weight: 900;
+        letter-spacing: -0.5px;
     }
 
+    /* 2. 버튼 그룹을 더 지능적으로 배치 */
     .btn-group {
-        grid-template-columns: 1fr 1fr 1fr;
-        /* 버튼 크기 균등 배분 */
+        display: flex;
+        /* grid 대신 flex로 유연하게 */
+        justify-content: space-between;
         gap: 5px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+        width: 100%;
     }
 
-    .btn-p,
-    .btn-s {
-        padding: 10px;
-        font-size: 0.8rem;
+    .btn-group button {
+        flex: 1;
+        /* 모든 버튼이 동일한 비율로 공간 차지 */
+        padding: 10px 5px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        /* 글자가 줄바꿈되지 않게 */
+        border-radius: 10px;
     }
 
+    #theme-btn {
+        padding: 0 10px;
+        /* 테마 버튼만 여백 조절 */
+    }
+
+    /* 3. 정보 띠지 컴팩트화 */
     .current-info {
-        padding: 12px;
-        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 10px;
+        margin-bottom: 8px;
+    }
+
+    #day-text {
+        font-size: 0.75rem;
+        margin-right: 10px;
+        font-weight: 800;
     }
 
     #act-text {
-        font-size: 1rem;
+        font-size: 0.85rem;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    /* 모달창도 모바일 크기에 맞게 조절 */
-    .modal-body {
-        width: 95%;
-        max-height: 90vh;
-        padding: 15px;
-    }
-
-    .modal-header {
-        padding: 15px;
-    }
-
-    #itinerary-table {
-        padding: 0 15px 15px;
+    /* 리스트 간격 조절 */
+    #log-list li {
+        padding: 10px 5px;
+        font-size: 0.85rem;
     }
 }
 
-/* 아주 작은 폰 대응 (480px 이하) */
-@media (max-width: 480px) {
-    .control-panel {
-        height: 45vh;
-        /* 리스트 가독성을 위해 살짝 높임 */
-    }
-
-    .family-badge {
-        font-size: 0.7rem;
-    }
+/* 다크모드 시 상단바 색상 대응 (JS에서 연동 권장) */
+.dark-theme-meta {
+    background-color: #1a1a1a !important;
 }
