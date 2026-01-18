@@ -121,7 +121,9 @@ async function runSimulation()
         document.getElementById('day-text').innerText = `${p.d} 일정`;
         document.getElementById('act-text').innerText = `${p.t} - ${p.act}`;
 
-        let targetZoom = (p.d === "02.10" && i < 2) || p.d === "02.21" ? 5 : 13;
+        // 시뮬레이션 내부의 targetZoom 결정 로직 수정
+        let isMobile = window.innerWidth <= 768;
+        let targetZoom = (p.d === "02.10" && i < 2) || p.d === "02.21" ? (isMobile ? 4 : 5) : (isMobile ? 12 : 13);
         map.flyTo(p.loc, targetZoom, { duration: 1.5, ease: "power2.inOut" });
 
         await new Promise(res =>

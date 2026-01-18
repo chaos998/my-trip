@@ -332,3 +332,77 @@ td {
         transform: translateY(0);
     }
 }
+
+@media (max-width: 768px) {
+    .control-panel {
+        top: auto;
+        /* 상단 고정 해제 */
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /* 하단에 밀착 */
+        width: 100%;
+        /* 가로 꽉 차게 */
+        height: 40vh;
+        /* 화면 높이의 40%만 차지 */
+        border-radius: 25px 25px 0 0;
+        /* 위쪽만 둥글게 */
+        padding: 15px 20px;
+        box-sizing: border-box;
+        transition: height 0.3s ease;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .btn-group {
+        grid-template-columns: 1fr 1fr 1fr;
+        /* 버튼 크기 균등 배분 */
+        gap: 5px;
+        margin-bottom: 10px;
+    }
+
+    .btn-p,
+    .btn-s {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+
+    .current-info {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    #act-text {
+        font-size: 1rem;
+    }
+
+    /* 모달창도 모바일 크기에 맞게 조절 */
+    .modal-body {
+        width: 95%;
+        max-height: 90vh;
+        padding: 15px;
+    }
+
+    .modal-header {
+        padding: 15px;
+    }
+
+    #itinerary-table {
+        padding: 0 15px 15px;
+    }
+}
+
+/* 아주 작은 폰 대응 (480px 이하) */
+@media (max-width: 480px) {
+    .control-panel {
+        height: 45vh;
+        /* 리스트 가독성을 위해 살짝 높임 */
+    }
+
+    .family-badge {
+        font-size: 0.7rem;
+    }
+}
