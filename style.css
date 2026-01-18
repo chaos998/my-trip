@@ -1,9 +1,10 @@
-/* 기본 변수 및 테마 설정 */
+/* 1. 기본 변수 및 테마 설정 */
 :root {
     --bg: #ffffff;
     --text: #2c3e50;
     --accent: #d35400;
     --panel: rgba(255, 255, 255, 0.95);
+    --modal-bg: #ffffff;
 }
 
 .dark-theme {
@@ -11,9 +12,11 @@
     --text: #ecf0f1;
     --accent: #e67e22;
     --panel: rgba(30, 30, 30, 0.95);
+    --modal-bg: #2c2c2e;
+    /* 다크모드용 모달 배경 */
 }
 
-/* 기본 레이아웃 */
+/* 2. 기본 레이아웃 및 아이폰 노치 대응 */
 body,
 html {
     margin: 0;
@@ -21,6 +24,9 @@ html {
     height: 100%;
     font-family: 'Pretendard', sans-serif;
     overflow: hidden;
+    background-color: var(--bg);
+    /* 아이폰 상단바 인식을 위해 필수 */
+    transition: background-color 0.3s ease;
 }
 
 #map {
@@ -30,7 +36,7 @@ html {
     z-index: 1;
 }
 
-/* 좌측 컨트롤 패널 */
+/* 3. 좌측 컨트롤 패널 */
 .control-panel {
     position: absolute;
     top: 20px;
@@ -126,19 +132,19 @@ button {
     line-height: 1.3;
 }
 
-/* 좌측 리스트 로그 */
+/* 4. 리스트 로그 영역 */
 #log-list {
     flex-grow: 1;
     overflow-y: auto;
     list-style: none;
     padding: 0;
     margin: 0;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 #log-list li {
     padding: 12px 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     font-size: 0.9rem;
     display: flex;
     gap: 12px;
@@ -177,11 +183,9 @@ button {
     font-size: 0.85rem;
     margin: 20px 0 10px 0;
     text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.5s ease-out;
 }
 
-/* 모달(팝업) 디자인 보완 */
+/* 5. 모달(팝업) - 다크모드 호환성 강화 */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -200,7 +204,8 @@ button {
 }
 
 .modal-body {
-    background: white;
+    background: var(--modal-bg);
+    color: var(--text);
     width: 90%;
     max-width: 850px;
     max-height: 80vh;
@@ -208,10 +213,7 @@ button {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* 라운드 처리가 깨지지 않도록 설정 */
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-    color: #333;
-    animation: fadeIn 0.3s ease-out;
 }
 
 .modal-header {
@@ -219,37 +221,19 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #eee;
-    background: #fff;
-}
-
-.modal-header h3 {
-    margin: 0;
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--text);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--modal-bg);
 }
 
 #close-modal {
-    background: #f1f2f6;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text);
     border: none;
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s;
 }
 
-#close-modal:hover {
-    background: #ff4757;
-    color: white;
-}
-
-/* 표 영역 스크롤 및 헤더 고정 */
 #itinerary-table {
     overflow-y: auto;
     padding: 0 30px 30px;
@@ -266,75 +250,25 @@ table {
 th {
     position: sticky;
     top: 0;
-    background: #f8f9fa;
     z-index: 2;
     padding: 15px 12px;
     text-align: left;
+    background: var(--modal-bg);
     border-bottom: 2px solid var(--accent);
-    font-weight: bold;
+    color: var(--accent);
 }
 
 td {
     padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-}
-
-.modal-row {
-    transition: 0.2s;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .modal-row:hover {
-    background-color: rgba(211, 84, 0, 0.08);
+    background-color: rgba(243, 156, 18, 0.1);
     cursor: pointer;
 }
 
-.modal-row:hover td {
-    color: var(--accent);
-    padding-left: 15px;
-    /* 호버 시 강조 효과 */
-    font-weight: 600;
-}
-
-/* 경로 애니메이션 스타일 */
-.travel-path {
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: none;
-}
-
-/* 스크롤바 디자인 (크롬/사파리) */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #999;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* --- 모바일 지능형 레이아웃 (768px 이하) --- */
-/* --- 모바일 대응 (768px 이하) --- */
+/* 6. 모바일 대응 (아이폰 최적화) */
 @media (max-width: 768px) {
     .control-panel {
         top: auto;
@@ -344,93 +278,68 @@ td {
         width: 100%;
         height: auto;
         max-height: 38vh;
-        /* 리스트 가독성을 위해 살짝 조절 */
         border-radius: 20px 20px 0 0;
-        padding: 12px 15px calc(10px + env(safe-area-inset-bottom));
-        box-sizing: border-box;
+        padding: 12px 15px calc(15px + env(safe-area-inset-bottom));
+        /* 하단 여백 자동 계산 */
     }
 
-    /* 1. 헤더 영역 최적화 (넘침 방지) */
     header {
         display: flex;
         flex-direction: column;
-        /* 세로로 쌓되 간격 최소화 */
         gap: 5px;
         margin-bottom: 8px;
-    }
-
-    .meta-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin-bottom: 0;
     }
 
     h1 {
         font-size: 1.4rem;
-        /* 모바일에서 시원하면서도 안 넘치게 */
         margin: 5px 0;
-        font-weight: 900;
-        letter-spacing: -0.5px;
     }
 
-    /* 2. 버튼 그룹을 더 지능적으로 배치 */
     .btn-group {
         display: flex;
-        /* grid 대신 flex로 유연하게 */
-        justify-content: space-between;
         gap: 5px;
-        margin-bottom: 8px;
         width: 100%;
     }
 
     .btn-group button {
         flex: 1;
-        /* 모든 버튼이 동일한 비율로 공간 차지 */
         padding: 10px 5px;
         font-size: 0.75rem;
         white-space: nowrap;
-        /* 글자가 줄바꿈되지 않게 */
-        border-radius: 10px;
     }
 
-    #theme-btn {
-        padding: 0 10px;
-        /* 테마 버튼만 여백 조절 */
-    }
-
-    /* 3. 정보 띠지 컴팩트화 */
     .current-info {
-        display: flex;
-        align-items: center;
         padding: 8px 12px;
         border-radius: 10px;
-        margin-bottom: 8px;
     }
 
     #day-text {
         font-size: 0.75rem;
-        margin-right: 10px;
-        font-weight: 800;
     }
 
     #act-text {
         font-size: 0.85rem;
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 
-    /* 리스트 간격 조절 */
-    #log-list li {
-        padding: 10px 5px;
-        font-size: 0.85rem;
+    /* 모바일에서 팝업창 크기 최적화 */
+    .modal-body {
+        width: 95%;
+        max-height: 85vh;
+        border-radius: 20px;
     }
 }
 
-/* 다크모드 시 상단바 색상 대응 (JS에서 연동 권장) */
-.dark-theme-meta {
-    background-color: #1a1a1a !important;
+/* 경로 및 스크롤바 */
+.travel-path {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
 }

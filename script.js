@@ -205,11 +205,20 @@ document.getElementById('pdf-btn').onclick = () =>
 };
 document.getElementById('theme-btn').onclick = () =>
 {
-    document.body.classList.toggle('dark-theme');
-    const isDark = document.body.classList.contains('dark-theme');
+    const body = document.body;
+    body.classList.toggle('dark-theme');
 
-    // 상단바(노치) 색상 변경
-    document.getElementById('theme-meta').setAttribute('content', isDark ? '#1a1a1a' : '#ffffff');
+    const isDark = body.classList.contains('dark-theme');
+    const themeColor = isDark ? '#1a1a1a' : '#ffffff'; // 다크/라이트 색상 설정
 
-    document.querySelector('#theme-btn i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+    // 1. 노치(상단바) 메타 태그 업데이트
+    const metaTheme = document.getElementById('theme-meta');
+    if (metaTheme)
+    {
+        metaTheme.setAttribute('content', themeColor);
+    }
+
+    // 2. 아이콘 변경
+    const themeIcon = document.querySelector('#theme-btn i');
+    themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
 };
